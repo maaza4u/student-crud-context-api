@@ -1,25 +1,30 @@
 import React,{useState} from 'react';
 import { useGlobalContext } from '../contexts/GlobalState';
 import { Link } from 'react-router-dom';
-import { IUser } from '../types';
-import StudentModal from '../StudentModel';
 import { Button, TableCell,Table,TableRow,TableContainer,Paper, Grid} from "@material-ui/core";
+import { Modal,Typography,Box } from '@mui/material';
 import '../styles.css';
 
 const UserList: React.FC = () => {
   const { currentState, removeUser } = useGlobalContext();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+ 
 
   const users = currentState.users;
-  const [showModal, setShowModal] = useState(false);
-  const [dataToShow, setDataToShow] = useState(null as IUser | null);
 
-  const viewStudent = (data: IUser) => {
-    setDataToShow(data);
-    setShowModal(true);
-    
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
   };
-
-  const onCloseModal = () => setShowModal(false);
 
   return (
     <Grid>
@@ -53,25 +58,37 @@ const UserList: React.FC = () => {
             <Button variant="contained" color="secondary" onClick={() => removeUser(user.id)} style={{margin:'5px'}} >
               Delete
             </Button>
-            <Button
-                    variant="contained"
-                    color="primary"
-                    type="button"
-                    onClick={() => viewStudent(user.id)}
-                  >View</Button>
+            <Button onClick={handleOpen} variant='contained' color='primary'>View</Button>
+      <Modal
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+        <Typography id="keep-mounted-modal-description" sx={{ mt: 2,fontWeight:'20px'}}>
+            Student INFO
+          </Typography>
+          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            <Typography>Name: {user.name}</Typography>
+            <Typography>Email: {user.email} </Typography>
+            <Typography> Phone: {user.phone}</Typography>
+          </Typography>
+          
+        </Box>
+      </Modal>
+      
                   </div>
                   </TableCell>
          </TableRow>
-      
-    
-        );
+         );
         })}
   
     </Table>
     </TableContainer>
-    {showModal && dataToShow !== null && (
-        <StudentModal onClose={onCloseModal} data={dataToShow} />
-      )}
+   
+   
      
   </div>
   
@@ -80,3 +97,4 @@ const UserList: React.FC = () => {
 };
 
 export default UserList;
+
