@@ -1,0 +1,14 @@
+body {
+  background-color: #e5e5ef;
+  color: #fff;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.section-content {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 15px;
+}
