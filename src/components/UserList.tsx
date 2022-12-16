@@ -27,11 +27,12 @@ const UserList: React.FC = () => {
   };
 
   return (
-    <Grid>
+    
   
     <div>
-       <TableContainer component={Paper} style={{width:'750px'}}>
-      <Table style={{ width: '750px' }} aria-label="simple table">
+      <Grid>
+       <TableContainer component={Paper} style={{width:'750px',marginRight:'500px',display:'flex',}}>
+      <Table style={{ width: '750px',fontWeight:'bold' }} aria-label="simple table">
         <TableRow style={{textAlign:"center"}}>
           <TableCell >Name</TableCell>
           <TableCell>Email</TableCell>
@@ -67,9 +68,10 @@ const UserList: React.FC = () => {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-        <Typography id="keep-mounted-modal-description" sx={{ mt: 2,fontWeight:'20px'}}>
-            Student INFO
+        <Typography id="keep-mounted-modal-description" sx={{ mt: 2,fontWeight:'100px'}}>
+            <strong>Student INFO</strong>
           </Typography>
+          <br/>
           <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
             <Typography>Name: {user.name}</Typography>
             <Typography>Email: {user.email} </Typography>
@@ -88,13 +90,14 @@ const UserList: React.FC = () => {
     </Table>
     </TableContainer>
    
-   
+   </Grid>
      
   </div>
   
-  </Grid>
+  
   );
 };
 
 export default UserList;
+
 
