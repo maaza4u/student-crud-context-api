@@ -4,9 +4,18 @@ import { v4 as uuid } from 'uuid';
 import { useGlobalContext } from '../contexts/GlobalState';
 import { IUser } from '../types';
 import { FormControl,FormLabel,Input,Button, Grid, Container} from '@material-ui/core';
+import { withFormik, FormikProps, FormikErrors, Form, Field } from 'formik';
 
 
-const AddUser: React.FC = () => {
+interface FormValues {
+  name: string;
+  email: string;
+  phone: number
+}
+
+
+const AddUser = (props: FormikProps<FormValues>) => {
+  const { touched, errors, isSubmitting } = props;
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -26,7 +35,11 @@ const AddUser: React.FC = () => {
 
     // console.log('new user added:', addUser);
     history.push('/');
+   
   }
+
+
+
 
   const onChangeName = (e: any) => {
     setName(e.target.value);
@@ -41,23 +54,30 @@ const AddUser: React.FC = () => {
     setPhone(e.target.value);
   }
 
+  
+
+
+
   return (
     <> 
       <Grid>
         <Container>
       <h3 style={{color:'black'}}>ADD STUDENT INFO</h3>
+     
 
-      <form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit}>
         <FormControl className="mb-2">
           <div>
           <FormLabel>Name : </FormLabel>
            
-          <Input
-            type="text"
+          <Field
+            name='name'
+            type="name"
             onChange={onChangeName}
             placeholder="Enter name"
             required
           />
+           {touched.email && errors.email && <div>{errors.email}</div>}
           </div>
           <div>
           <FormLabel>Email : </FormLabel>
@@ -81,14 +101,18 @@ const AddUser: React.FC = () => {
           </div>
         </FormControl>
         <div>
-        <Button type="submit" variant="contained" color="primary" style={{margin:'5px'}}>Submit</Button>
+        
+        <Button type="submit" variant="contained" color="primary" style={{margin:'5px'}} disabled={isSubmitting} >Submit</Button>
+        
+    
         <Button type='button' variant="contained" color='secondary'>
         <Link to="/">
           Cancel
         </Link>
         </Button>
         </div>
-      </form>
+
+      </Form>
       </Container>
       </Grid>
       
@@ -96,4 +120,37 @@ const AddUser: React.FC = () => {
   );
 };
 
+interface MyFormProps {
+  initialEmail?: string;
+  initialName?: string;
+  initialPhone: number;
+}
+const MyForm = withFormik<MyFormProps, FormValues>({
+  // Transform outer props into form values
+  mapPropsToValues: props => {
+    return {
+      email: props.initialEmail || '',
+      phone: props.initialPhone|| '',
+      name: props.initialName|| ''
+    };
+  },
+
+  // Add a custom validation function (this can be async too!)
+  validate: (values: FormValues) => {
+    let errors: FormikErrors<FormValues> = {};
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (!isValidEmail(values.email)) {
+      errors.email = 'Invalid email address';
+    }
+    return errors;
+  },
+
+  handleSubmit: values => {
+    // do submitting things
+    console.log(values)
+  },
+})(AddUser);
 export default AddUser;
+
+
