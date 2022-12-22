@@ -4,21 +4,28 @@ import { v4 as uuid } from 'uuid';
 import { useGlobalContext } from '../contexts/GlobalState';
 import { IUser } from '../types';
 import { FormControl,FormLabel,Input,Button, Grid, Container} from '@material-ui/core';
-import { withFormik, FormikProps, FormikErrors, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { Formik, Form, Field } from 'formik';
+
+const SignupSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+ email: Yup.string().email('Invalid email').required('Required'),
+ phone: Yup.string()
+ .min(2, 'Too Short!')
+ .max(50, 'Too Long!')
+ .required('Required'),
+});
 
 
-interface FormValues {
-  name: string;
-  email: string;
-  phone: number
-}
 
-
-const AddUser = (props: FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting } = props;
+const AddUser = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
+  const [info,setInfo] = useState();
 
   const history = useHistory();
   const { addUser } = useGlobalContext();
@@ -63,7 +70,21 @@ const AddUser = (props: FormikProps<FormValues>) => {
       <Grid>
         <Container>
       <h3 style={{color:'black'}}>ADD STUDENT INFO</h3>
-     
+
+      <Formik
+       initialValues={{
+         name: '',
+         email: '',
+         phone: '',
+       }}
+       validationSchema={SignupSchema}
+       onSubmit={values => {
+  
+         // same shape as initial values
+         console.log(values);
+       }}
+     >
+       {({ errors, touched,values,handleBlur }) => (
 
       <Form onSubmit={onSubmit}>
         <FormControl className="mb-2">
@@ -71,18 +92,24 @@ const AddUser = (props: FormikProps<FormValues>) => {
           <FormLabel>Name : </FormLabel>
            
           <Field
+            id='name'
             name='name'
             type="name"
             onChange={onChangeName}
+            value={values.name}
+            onBlur={handleBlur}
             placeholder="Enter name"
             required
           />
-           {touched.email && errors.email && <div>{errors.email}</div>}
+           {errors.name && touched.name ? (
+             <div style={{color:'red',fontSize:'15px',width:'15%',paddingLeft:'120px',paddingTop:'10px'}} >{errors.name}</div>
+           ) : null}
           </div>
           <div>
           <FormLabel>Email : </FormLabel>
            
           <Input
+            name='email'
             type="text"
             onChange={onChangeEmail}
             placeholder="Enter Email"
@@ -93,6 +120,7 @@ const AddUser = (props: FormikProps<FormValues>) => {
           <FormLabel>Phone : </FormLabel>
            
           <Input
+            name='phone'
             type="text"
             onChange={onChangePhone}
             placeholder="Enter Phone"
@@ -102,7 +130,7 @@ const AddUser = (props: FormikProps<FormValues>) => {
         </FormControl>
         <div>
         
-        <Button type="submit" variant="contained" color="primary" style={{margin:'5px'}} disabled={isSubmitting} >Submit</Button>
+        <Button type="submit" variant="contained" color="primary" style={{margin:'5px'}}>Submit</Button>
         
     
         <Button type='button' variant="contained" color='secondary'>
@@ -113,6 +141,9 @@ const AddUser = (props: FormikProps<FormValues>) => {
         </div>
 
       </Form>
+        )}
+      </Formik>
+      
       </Container>
       </Grid>
       
@@ -120,37 +151,9 @@ const AddUser = (props: FormikProps<FormValues>) => {
   );
 };
 
-interface MyFormProps {
-  initialEmail?: string;
-  initialName?: string;
-  initialPhone: number;
-}
-const MyForm = withFormik<MyFormProps, FormValues>({
-  // Transform outer props into form values
-  mapPropsToValues: props => {
-    return {
-      email: props.initialEmail || '',
-      phone: props.initialPhone|| '',
-      name: props.initialName|| ''
-    };
-  },
 
-  
-  validate: (values: FormValues) => {
-    let errors: FormikErrors<FormValues> = {};
-    if (!values.email) {
-      errors.email = 'Required';
-    } else if (!isValidEmail(values.email)) {
-      errors.email = 'Invalid email address';
-    }
-    return errors;
-  },
-
-  handleSubmit: values => {
-    // do submitting things
-    console.log(values)
-  },
-})(AddUser);
 export default AddUser;
+
+
 
 
