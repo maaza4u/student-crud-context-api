@@ -7,6 +7,14 @@ import { FormControl,FormLabel,Input,Button, Grid, Container} from '@material-ui
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 
+type Props = {
+
+  users: IUser[];
+  setUsers: (data : IUser []) => void;
+  onBackBtnClickHnd: () => void;
+  handleSubmit:any
+}
+
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Too Short!')
@@ -21,16 +29,17 @@ const SignupSchema = Yup.object().shape({
 
 
 
-const AddUser = () => {
+
+const AddUser = (props: Props) => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [info,setInfo] = useState();
-
+  // const [users, setusers] =  useState<string>('');
   const history = useHistory();
   const { addUser } = useGlobalContext();
+  const{users,setUsers,onBackBtnClickHnd} = props
 
-  function onSubmit() {
+  const onSubmit =(values:any) => {
     const newUser: IUser = {
       id: uuid(),
       name,
@@ -42,8 +51,29 @@ const AddUser = () => {
 
     // console.log('new user added:', addUser);
     history.push('/');
-   
+    values.id = users.length + 1;
+      
+    setUsers([...users,values])
+    onBackBtnClickHnd();
+       
+    // same shape as initial values
+    console.log(values);
   }
+
+  // function onSubmitt() {
+  //   const newUser: IUser = {
+  //     id: uuid(),
+  //     name,
+  //     email,
+  //     phone
+  //   };
+
+  //   addUser(newUser);
+
+  //   // console.log('new user added:', addUser);
+  //   history.push('/');
+   
+  // }
 
 
 
@@ -78,15 +108,18 @@ const AddUser = () => {
          phone: '',
        }}
        validationSchema={SignupSchema}
-       onSubmit={values => {
-  
-         // same shape as initial values
-         console.log(values);
-       }}
-     >
-       {({ errors, touched,values,handleBlur }) => (
+       onSubmit={onSubmit}
+       onBackBtnClickHnd={onBackBtnClickHnd}
 
-      <Form onSubmit={onSubmit}>
+       
+      //  onSubmit={values => {
+  
+      //    // same shape as initial values
+      //    console.log(values);
+      //  }}
+     >
+       {({ errors, touched,values,handleBlur,handleChange,handleSubmit }) => (
+      <form onSubmit={handleSubmit}>
         <FormControl className="mb-2">
           <div>
           <FormLabel>Name : </FormLabel>
@@ -95,7 +128,7 @@ const AddUser = () => {
             id='name'
             name='name'
             type="name"
-            onChange={onChangeName}
+            onChange={handleChange}
             value={values.name}
             onBlur={handleBlur}
             placeholder="Enter name"
@@ -104,6 +137,7 @@ const AddUser = () => {
            {errors.name && touched.name ? (
              <div style={{color:'red',fontSize:'15px',width:'15%',paddingLeft:'120px',paddingTop:'10px'}} >{errors.name}</div>
            ) : null}
+    
           </div>
           <div>
           <FormLabel>Email : </FormLabel>
@@ -140,7 +174,7 @@ const AddUser = () => {
         </Button>
         </div>
 
-      </Form>
+      </form>
         )}
       </Formik>
       
@@ -153,6 +187,8 @@ const AddUser = () => {
 
 
 export default AddUser;
+
+
 
 
 
