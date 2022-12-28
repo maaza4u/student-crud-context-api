@@ -25,3 +25,12 @@ export enum ActionTypes {
   ADD_USER = 'ADD_USER',
   EDIT_USER = 'EDIT_USER',
 }
+
+export enum PageEnum {
+  list,
+  add,
+  edit,
+  addUser,
+  removeUser,
+  editUser,
+}
