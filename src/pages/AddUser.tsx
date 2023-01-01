@@ -3,17 +3,17 @@ import { Link, useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useGlobalContext } from '../contexts/GlobalState';
 import { IUser } from '../types';
-import { FormControl,FormLabel,Input,Button, Grid, Container} from '@material-ui/core';
-import * as Yup from 'yup';
-import { Form, Field,useFormik } from 'formik';
+import { FormLabel,Button, Grid, Container} from '@material-ui/core';
+import {  useFormik } from 'formik';
 import { schemaValidation } from "../validationschema";
+import { Input } from '@mui/material';
 
 type Props = {
-
+  handleSubmit: any
   users: IUser[];
   setUsers: (data : IUser []) => void;
   onBackBtnClickHnd: () => void;
-  handleSubmit:any
+  // values: IUser[]
 }
 
 const initialValues : IUser = {
@@ -27,85 +27,31 @@ const initialValues : IUser = {
 
 
 const AddUser = (props: Props) => {
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
+  // const [name, setName] = useState<string>('');
+  // const [email, setEmail] = useState<string>('');
+  // const [phone, setPhone] = useState<string>('');
   // const [users, setusers] =  useState<string>('');
   const history = useHistory();
   const { addUser } = useGlobalContext();
   const{users,setUsers,onBackBtnClickHnd} = props
 
-  // const onSubmit =(values:any) => {
-  //   const newUser: IUser = {
-  //     id: uuid(),
-  //     name,
-  //     email,
-  //     phone
-  //   };
+  
 
-  //   addUser(newUser);
-
-  //   // console.log('new user added:', addUser);
-  //   history.push('/');
-  //   values.id = users.length + 1;
-      
-  //   setUsers([...users,values])
-  //   onBackBtnClickHnd();
-       
-  //   // same shape as initial values
-  //   console.log(values);
-  // }
-
-  // function onSubmitt() {
-  //   const newUser: IUser = {
-  //     id: uuid(),
-  //     name,
-  //     email,
-  //     phone
-  //   };
-
-  //   addUser(newUser);
-
-  //   // console.log('new user added:', addUser);
-  //   history.push('/');
-   
-  // }
-
-
-
-
-  const onChangeName = (e: any) => {
-    setName(e.target.value);
-    
-  };
-
-  const onChangeEmail = (e: any) => {
-    setEmail(e.target.value);
-  };
-
-  const onChangePhone = (e: any) => {
-    setPhone(e.target.value);
-  }
-
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({
     initialValues,
     // validateOnMount:true,
     validationSchema: schemaValidation,
-    // enableReinitialize:true,
-    onSubmit: (values, action) => {
-  
-      values.id = users.length + 1;
-    
-      setUsers([...users,values])
-      // onSubmitClickHnd(values);
+    // enableReinitialize: true,
+    validateOnMount:true,
+    onSubmit: async (values,action) => {
       console.log(
-        "valueone",
-        users
+        values,
+        users,
       );
       action.resetForm();
-      addUser(initialValues);
-     
-
+      // addUser(initialValues);
+      addUser(values);
+      history.push('/');
     },
   });
 
@@ -119,7 +65,7 @@ const AddUser = (props: Props) => {
 
       
       <form onSubmit={handleSubmit}>
-        <FormControl className="mb-2">
+        
           <div>
           <FormLabel>Name : </FormLabel>
            
@@ -143,25 +89,39 @@ const AddUser = (props: Props) => {
           <FormLabel>Email : </FormLabel>
            
           <Input
+            id='email'
             name='email'
-            type="text"
-            onChange={onChangeEmail}
+            type="email"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value = {values.email}
             placeholder="Enter Email"
+            autoComplete='of'
             required
           />
+             {touched.email && errors.email? (
+            <div style={{color:'red',fontSize:'15px',width:'100%',paddingLeft:'50px',paddingTop:'10px'}} >{errors.email}</div>
+          ) : null} 
+    
           </div>
           <div>
           <FormLabel>Phone : </FormLabel>
            
           <Input
+             id='phone'
             name='phone'
-            type="text"
-            onChange={onChangePhone}
+            type="phone"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value = {values.phone}
             placeholder="Enter Phone"
             required
+            autoComplete='of'
           />
+            {touched.phone && errors.phone? (
+            <div style={{color:'red',fontSize:'15px',width:'100%',paddingLeft:'50px',paddingTop:'10px'}} >{errors.phone}</div>
+          ) : null} 
           </div>
-        </FormControl>
         <div>
         
         <Button type='submit' variant="contained" color="primary" style={{margin:'5px'}}>Submit</Button>
