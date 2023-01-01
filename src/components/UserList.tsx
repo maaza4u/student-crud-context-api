@@ -1,18 +1,30 @@
-import React,{useState} from 'react';
+import React,{useEffect,useState} from 'react';
 import { useGlobalContext } from '../contexts/GlobalState';
 import { Link } from 'react-router-dom';
 import { Button, TableCell,Table,TableRow,TableContainer,Paper, Grid} from "@material-ui/core";
-import { Modal,Typography,Box } from '@mui/material';
+import { Modal,Typography,Box} from '@mui/material';
 import '../styles.css';
+import { IUser } from '../types';
+import { v4 as uuid } from 'uuid';
 
-const UserList: React.FC = () => {
-  const { currentState, removeUser } = useGlobalContext();
+type Props = {
+  users: IUser[];
+  setUsers: (data : IUser []) => void;
+  onDeleteClickHnd: (data: IUser) => void;
+  onEdit: (data: IUser) => void;
+  removeUser: (id: typeof uuid)=> void;
+ 
+}
+
+const UserList = (props:Props) => {
+  const { currentState, removeUser} = useGlobalContext();
   const [open, setOpen] = React.useState(false);
+  // const [user, setUsers] = useState([] as IUser[]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const users = currentState.users;
  
 
-  const users = currentState.users;
 
   const style = {
     position: 'absolute' as 'absolute',
@@ -39,10 +51,10 @@ const UserList: React.FC = () => {
           <TableCell>Phone</TableCell>
           <TableCell>Action</TableCell>
         </TableRow>
-      {users.map((user, key) => {
+      {users.map((user,values) => {
         return (
            
-          <TableRow key={key}>
+          <TableRow key={values}>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
           <TableCell>{user.phone}</TableCell>
@@ -52,6 +64,7 @@ const UserList: React.FC = () => {
             <Link
               to={`/edit/${user.id}`}
               color='white'
+              
             >
               Update
             </Link>
@@ -99,5 +112,6 @@ const UserList: React.FC = () => {
 };
 
 export default UserList;
+
 
 
