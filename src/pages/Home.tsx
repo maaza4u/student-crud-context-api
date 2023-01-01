@@ -5,6 +5,7 @@ import UserList from '../components/UserList';
 import { IUser,PageEnum } from '../types';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
+import { V4Options } from 'uuid';
 
 
 
@@ -14,7 +15,7 @@ const Home = () => {
   const [shownPage, setShownPage] = useState(PageEnum.list);
   const [dataToEdit, setDataToEdit] = useState({} as IUser);
   useEffect(() => {
-    const listInString = window.localStorage.getItem("studentinfo");
+    const listInString = window.localStorage.getItem("users");
     if (listInString) {
       _setUsers(JSON.parse(listInString));
     }
@@ -64,8 +65,10 @@ const Home = () => {
        <br/>
        {shownPage === PageEnum.list && (
         <>
-      <UserList users={users} setUsers={setUsers } onDeleteClickHnd={deleteUser}
-              onEdit={editUserData} />
+      <UserList users={users} setUsers={setUsers} onDeleteClickHnd={deleteUser}
+            onEdit={editUserData} removeUser={function (id: (<T extends ArrayLike<number>>(options: V4Options | null | undefined, buffer: T, offset?: number | undefined) => T) & ((options?: V4Options | undefined) => string)): void {
+              throw new Error('Function not implemented.');
+            } } />
        </>
          )}
           {shownPage === PageEnum.add && (
