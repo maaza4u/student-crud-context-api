@@ -6,12 +6,7 @@ import Typography from '@mui/material/Typography';
 
 
 
-
 const Header: React.FC = () => {
-  
-
-
-
   return (
     <Grid>
     <AppBar>
