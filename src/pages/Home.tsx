@@ -21,13 +21,11 @@ const Home = () => {
     }
   }, []);
 
-  const _setUsers = (list: IUser[]) => {
-    // setStudentList(list);
+  const _setUsers = (list: IUser[]) => {;
     setUsers(list);
     window.localStorage.setItem("users", JSON.stringify(list));
   };
   const addUser = (data: IUser) => {
-    // _setStudentList([...studentList, data]);
      setUsers([...users,data]);
   };
 
@@ -36,7 +34,6 @@ const Home = () => {
     const indexOfRecord = users.indexOf(filteredData);
     const tempData = [...users];
     tempData[indexOfRecord] = data;
-    // _setStudentList(tempData);
     setUsers(tempData)
   };
 
@@ -53,7 +50,6 @@ const Home = () => {
     const indexToDelete = users.indexOf(data);
     const tempList = [...users];
     tempList.splice(indexToDelete, 1);
-    // _setStudentList(tempList);
      setUsers(tempList);
   };
 
