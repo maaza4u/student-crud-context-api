@@ -13,7 +13,6 @@ type Props = {
   users: IUser[];
   setUsers: (data : IUser []) => void;
   onBackBtnClickHnd: () => void;
-  // values: IUser[]
 }
 
 const initialValues : IUser = {
@@ -27,10 +26,6 @@ const initialValues : IUser = {
 
 
 const AddUser = (props: Props) => {
-  // const [name, setName] = useState<string>('');
-  // const [email, setEmail] = useState<string>('');
-  // const [phone, setPhone] = useState<string>('');
-  // const [users, setusers] =  useState<string>('');
   const history = useHistory();
   const { addUser } = useGlobalContext();
   const{users,setUsers,onBackBtnClickHnd} = props
@@ -39,9 +34,7 @@ const AddUser = (props: Props) => {
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({
     initialValues,
-    // validateOnMount:true,
     validationSchema: schemaValidation,
-    // enableReinitialize: true,
     validateOnMount:true,
     onSubmit: async (values,action) => {
       console.log(
@@ -49,27 +42,19 @@ const AddUser = (props: Props) => {
         users,
       );
       action.resetForm();
-      // addUser(initialValues);
       addUser(values);
       history.push('/');
     },
   });
-
-
-
   return (
     <> 
       <Grid>
         <Container>
       <h3 style={{color:'black'}}>ADD STUDENT INFO</h3>
-
-      
       <form onSubmit={handleSubmit}>
-        
-          <div>
+        <div>
           <FormLabel>Name : </FormLabel>
-           
-          <Input
+           <Input
             id='name'
             name='name'
             type="name"
