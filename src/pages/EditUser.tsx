@@ -1,20 +1,23 @@
-import { FormLabel,Input,Button, FormControl,Container,Grid } from '@material-ui/core';
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect} from 'react';
+import { FormLabel,Button,Container,Grid } from '@material-ui/core';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { useGlobalContext } from '../contexts/GlobalState';
 import { IUser, IParams } from '../types';
+import { Input } from '@mui/material';
+
 
 type Props = { 
   data: IUser;
   onBackBtnClickHnd: () => void;
   users : IUser [];
   setUsers: (data : IUser []) => void;
-  onUpdateClickHnd: (data: IUser) => void;
+  // onUpdateClickHnd: (data: IUser) => void;
 }
 
 const EditUser = (props:Props) => {
+ 
   const history = useHistory();
-  const {onBackBtnClickHnd,onUpdateClickHnd} = props
+  
 
   const { currentState, editUser } = useGlobalContext();
   const users = currentState.users;
@@ -27,6 +30,7 @@ const EditUser = (props:Props) => {
     phone:''
   });
 
+
   const currentUserId = params.id;
 
   useEffect(() => {
@@ -37,42 +41,45 @@ const EditUser = (props:Props) => {
     setSelectedUser(findSelectedUser);
   }, [currentUserId, users]);
 
-  function onSubmit(event: ChangeEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    editUser(selectedUser);
-    onBackBtnClickHnd();
+  const onSubmit =(e:any)=> {
+    e.preventDefault();
+     editUser(selectedUser)
+    // onUpdateClickHnd(selectedUser)
+    // onBackBtnClickHnd();
     console.log('new user edited:', selectedUser);
     history.push('/');
-    onUpdateClickHnd(selectedUser);
   }
 
   const onChangeEditName = (
-    e:any
+    event:any
   ) => {
     setSelectedUser({
-      ...selectedUser,
-      [e.target.name]: e.target.value,
+        ...selectedUser,
+      [event.target.name]: event.target.value,
+
     });
   };
 
   const onChangeEditEmail = (
-    e:any
+    event:any
   ) => {
     setSelectedUser({
       ...selectedUser,
-      [e.target.email]: e.target.value,
+      [event.target.email]: event.target.value,
     });
   };
 
   const onChangeEditPhone = (
-    e:any
+    event:any
   ) => {
     setSelectedUser({
       ...selectedUser,
-      [e.target.phone]: e.target.value,
+      [event.target.phone]: event.target.value,
     });
   };
+
+
+
 
   return (
     <>
@@ -81,12 +88,14 @@ const EditUser = (props:Props) => {
       <h3>Edit Student Info</h3>
 
       <form onSubmit={onSubmit}>
-        <FormControl className="mb-2">
+       
           <div>
           <FormLabel>Name :</FormLabel>
           <Input
+            id='name'
             type="text"
-            name="name"
+            name='name'
+            value={selectedUser.name}
             onChange={onChangeEditName}
             placeholder="Enter new name"
             required
@@ -95,24 +104,29 @@ const EditUser = (props:Props) => {
           <div>
           <FormLabel>Email :</FormLabel>
           <Input
+            id='email'
             type="text"
-            name="email"
+            value={selectedUser.email}
+            // value={selectedUser.email}
+            name='email'
+          
             onChange={onChangeEditEmail}
             placeholder="Enter New Email"
             required
           />
           </div>
           <div>
-          <FormLabel>Email :</FormLabel>
+          <FormLabel>Phone :</FormLabel>
           <Input
+            id='phone'
+            value={selectedUser.phone}
+            name='phone'
             type="text"
-            name="email"
             onChange={onChangeEditPhone}
             placeholder="Enter New Phone Number"
             required
           />
           </div>
-        </FormControl>
         <div>
         <Button type="submit" variant='contained' color='primary' style={{margin:'5px'}}>
           Submit
@@ -132,78 +146,3 @@ const EditUser = (props:Props) => {
 
 export default EditUser;
 
-  const onChangeEditEmail = (
-    e:any
-  ) => {
-    setSelectedUser({
-      ...selectedUser,
-      [e.target.email]: e.target.value,
-    });
-  };
-
-  const onChangeEditPhone = (
-    e:any
-  ) => {
-    setSelectedUser({
-      ...selectedUser,
-      [e.target.phone]: e.target.value,
-    });
-  };
-
-  return (
-    <>
-      <Grid>
-        <Container>
-      <h3>Edit Student Info</h3>
-
-      <form onSubmit={onSubmit}>
-        <FormControl className="mb-2">
-          <div>
-          <FormLabel>Name :</FormLabel>
-          <Input
-            type="text"
-            name="name"
-            onChange={onChangeEditName}
-            placeholder="Enter new name"
-            required
-          />
-          </div>
-          <div>
-          <FormLabel>Email :</FormLabel>
-          <Input
-            type="text"
-            name="email"
-            onChange={onChangeEditEmail}
-            placeholder="Enter New Email"
-            required
-          />
-          </div>
-          <div>
-          <FormLabel>Email :</FormLabel>
-          <Input
-            type="text"
-            name="email"
-            onChange={onChangeEditPhone}
-            placeholder="Enter New Phone Number"
-            required
-          />
-          </div>
-        </FormControl>
-        <div>
-        <Button type="submit" variant='contained' color='primary' style={{margin:'5px'}}>
-          Submit
-        </Button>
-        <Button variant='contained' color='secondary'>
-        <Link to="/">
-          Cancel
-        </Link>
-        </Button>
-        </div>
-      </form>
-      </Container>
-      </Grid>
-    </>
-  );
-};
-
-export default EditUser;
