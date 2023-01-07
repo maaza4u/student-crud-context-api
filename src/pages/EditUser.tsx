@@ -15,7 +15,10 @@ type Props = {
 }
 
 const EditUser = (props:Props) => {
- 
+  // const {onBackBtnClickHnd,onUpdateClickHnd} = props
+  // const [name, setName] = useState(data.name);
+  // const [email, setEmail] = useState(data.email);
+  // const [phone, setPhone] = useState(data.phone);
   const history = useHistory();
   
 
@@ -50,7 +53,7 @@ const EditUser = (props:Props) => {
     history.push('/');
   }
 
-  const onChangeEditName = (
+  const onChangeEditInput = (
     event:any
   ) => {
     setSelectedUser({
@@ -59,27 +62,6 @@ const EditUser = (props:Props) => {
 
     });
   };
-
-  const onChangeEditEmail = (
-    event:any
-  ) => {
-    setSelectedUser({
-      ...selectedUser,
-      [event.target.email]: event.target.value,
-    });
-  };
-
-  const onChangeEditPhone = (
-    event:any
-  ) => {
-    setSelectedUser({
-      ...selectedUser,
-      [event.target.phone]: event.target.value,
-    });
-  };
-
-
-
 
   return (
     <>
@@ -96,7 +78,7 @@ const EditUser = (props:Props) => {
             type="text"
             name='name'
             value={selectedUser.name}
-            onChange={onChangeEditName}
+            onChange={onChangeEditInput}
             placeholder="Enter new name"
             required
           />
@@ -110,10 +92,12 @@ const EditUser = (props:Props) => {
             // value={selectedUser.email}
             name='email'
           
-            onChange={onChangeEditEmail}
+            onChange={onChangeEditInput}
             placeholder="Enter New Email"
             required
+          
           />
+        
           </div>
           <div>
           <FormLabel>Phone :</FormLabel>
@@ -122,7 +106,7 @@ const EditUser = (props:Props) => {
             value={selectedUser.phone}
             name='phone'
             type="text"
-            onChange={onChangeEditPhone}
+            onChange={onChangeEditInput}
             placeholder="Enter New Phone Number"
             required
           />
