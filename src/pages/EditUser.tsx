@@ -15,13 +15,7 @@ type Props = {
 }
 
 const EditUser = (props:Props) => {
-  // const {onBackBtnClickHnd,onUpdateClickHnd} = props
-  // const [name, setName] = useState(data.name);
-  // const [email, setEmail] = useState(data.email);
-  // const [phone, setPhone] = useState(data.phone);
   const history = useHistory();
-  
-
   const { currentState, editUser } = useGlobalContext();
   const users = currentState.users;
   const params: IParams = useParams();
@@ -47,8 +41,6 @@ const EditUser = (props:Props) => {
   const onSubmit =(e:any)=> {
     e.preventDefault();
      editUser(selectedUser)
-    // onUpdateClickHnd(selectedUser)
-    // onBackBtnClickHnd();
     console.log('new user edited:', selectedUser);
     history.push('/');
   }
@@ -81,6 +73,7 @@ const EditUser = (props:Props) => {
             onChange={onChangeEditInput}
             placeholder="Enter new name"
             required
+            autoComplete='of'
           />
           </div>
           <div>
@@ -89,13 +82,11 @@ const EditUser = (props:Props) => {
             id='email'
             type="text"
             value={selectedUser.email}
-            // value={selectedUser.email}
             name='email'
-          
             onChange={onChangeEditInput}
             placeholder="Enter New Email"
             required
-          
+            autoComplete='of'
           />
         
           </div>
@@ -109,6 +100,7 @@ const EditUser = (props:Props) => {
             onChange={onChangeEditInput}
             placeholder="Enter New Phone Number"
             required
+            autoComplete='of'
           />
           </div>
         <div>
