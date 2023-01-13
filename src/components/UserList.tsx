@@ -69,10 +69,10 @@ const UserList = (props:Props) => {
               Update
             </Link>
             </Button>
+           <Button onClick={handleOpen} variant='contained' color='primary' style={{margin:'20px',marginTop:'20px',marginRight:'50px'}}>View</Button>
             <Button variant="contained" color="secondary" onClick={() => removeUser(user.id)} style={{margin:'5px'}} >
               Delete
             </Button>
-            <Button onClick={handleOpen} variant='contained' color='primary'>View</Button>
       <Modal
         keepMounted
         open={open}
