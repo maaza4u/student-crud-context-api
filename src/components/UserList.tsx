@@ -43,13 +43,13 @@ const UserList = (props:Props) => {
   
     <div>
       <Grid>
-       <TableContainer component={Paper} style={{width:'750px',marginRight:'500px',display:'flex',}}>
+      <TableContainer component={Paper} style={{width:'750px'}} >
       <Table style={{ width: '750px',fontWeight:'bold' }} aria-label="simple table">
-        <TableRow style={{textAlign:"center"}}>
-          <TableCell >Name</TableCell>
-          <TableCell>Email</TableCell>
-          <TableCell>Phone</TableCell>
-          <TableCell>Action</TableCell>
+        <TableRow style={{marginRight:'200px'}} >
+          <TableCell style={{fontWeight:'bold'}} >Name</TableCell>
+          <TableCell style={{fontWeight:'bold'}}>Email</TableCell>
+          <TableCell style={{fontWeight:'bold'}}>Phone</TableCell>
+          <TableCell style={{fontWeight:'bold'}}>Action</TableCell>
         </TableRow>
       {users.map((user,values) => {
         return (
